@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+    body {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        background: url(https://images.unsplash.com/photo-1556578330-5caf4520131e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fGNhbGN1bGF0b3IlMjBmb3IlMjBiYWNrZ3JvdW5kfGVufDB8fDB8fHww);
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: wheat;
+    }
+
+    .container {
+        background: #323232b7;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(190, 190, 190, 0.678);
+        width: 80%;
+        max-width: 600px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    input, button {
+        padding: 10px;
+        font-size: 1rem;
+        margin: 5px 0;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        background-color: rgba(230, 217, 193, 0.833);
+        color: black;
+    }
+
+    button {
+        background-color: rgba(93, 34, 9, 0.826);
+        color: white;
+        cursor: pointer;
+        border: none;
+    }
+
+    button:hover {
+        background-color: #3d1502;
+        transition: 0.3s;
+    }
+
+    .subject-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .subject-row input {
+        flex: 1;
+    }
+
+    #result {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 15px;
+        font-weight: 700;
+    }
+</style>
+<body>
+    <div class="container">
+        <h1>CGPA Calculator</h1>
+        <label for="numSubjects">Enter no of Subject :</label>
+        <input type="number" id="numSubjects" placeholder="No of Subjects" min="1" required />
+        <button onclick="generateInputs()">Add</button>
+        <form id="subjectsForm" onsubmit="event.preventDefault(); calculateCGPA();"></form>
+        <div id="result"></div>
+    </div>
+    <script>
+       function generateInputs() {
+        const numSubjects = parseInt(document.getElementById("numSubjects").value);
+        const form = document.getElementById("subjectsForm");
+        form.innerHTML = ""; 
+         if (numSubjects > 0) {
+            for (let i = 0; i < numSubjects; i++) {
+                const div = document.createElement("div");
+                div.className = "subject-row";
+                div.innerHTML = `<input type="number" placeholder="Marks for Subject ${i + 1}" class="marks" required />
+                <input type="number" placeholder="Credits for Subject ${i + 1}" class="credits" required /> `;
+                form.appendChild(div);
+                }
+                const submitBtn = document.createElement("button");
+                submitBtn.type = "submit";
+                submitBtn.textContent = "Calculate CGPA";
+                form.appendChild(submitBtn);
+                }
+            }
+        function calculateCGPA() {
+        const marksInputs = document.querySelectorAll(".marks");
+        const creditsInputs = document.querySelectorAll(".credits");
+        let totalPoints = 0;
+        let totalCredits = 0;
+        for (let i = 0; i < marksInputs.length; i++) {
+            const marks = parseFloat(marksInputs[i].value);
+            const credits = parseFloat(creditsInputs[i].value);
+            if (marks >= 0 && credits > 0) {
+                totalPoints += marks * credits;
+                totalCredits += credits;
+            }
+        }
+        const cgpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "Invalid Input";
+        document.getElementById("result").innerText = `CGPA is: ${cgpa}`;
+        }
+    </script>
+</body>
+</html>
